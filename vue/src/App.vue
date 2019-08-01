@@ -2,8 +2,8 @@
   <b-container fluid>
     <b-row>
       <b-card
-        v-for="item in movies"
-        :key="item.id"
+        v-for="(item, idx) in movies"
+        :key="idx"
         :title="item.title"
         :img-src="item.poster"
         img-alt="Image"
@@ -14,8 +14,13 @@
         <b-card-text>
           {{item.overview}}
         </b-card-text>
-        <star-rating :show-rating="false" v-model="item.rating"></star-rating>
-        <b-button href="#" variant="primary">Go somewhere</b-button>
+        <star-rating 
+          :increment="0.5"
+          :show-rating="false" 
+          :rating="item.rating"
+          v-bind:star-size="30"
+          @rating-selected="setRatingAction($event, item)"></star-rating>
+        <b-button class="mt-2" href="#" variant="primary">Go somewhere</b-button>
       </b-card>
     </b-row>
     
@@ -40,8 +45,6 @@ export default {
   },
   computed: {
     movies(){
-      console.log(this.$store.state.movie)
-      
       return this.$store.state.movie.movies
     }
   },
@@ -58,7 +61,8 @@ export default {
               id,
               title,
               poster,
-              overview
+              overview,
+              rating
             }
           }
         `
@@ -74,6 +78,9 @@ export default {
     moreAction(){
       this.page++
       this.getMovies()
+    },
+    setRatingAction(rating, item){
+      this.$store.dispatch('updateRating', {item, rating})
     }
   }
 }

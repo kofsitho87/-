@@ -7,10 +7,12 @@ const state = {
 
 const mutations = {
   SET_MOVIES(state, movies) {
-    console.log(movies);
-    
-    state.movies.concat(movies)
+    state.movies = state.movies.concat(movies)
   },
+  SET_RATING(state, {item, rating}){
+    const index = state.movies.indexOf(item)
+    state.movies[index].rating = rating
+  }
 }
 
 const actions = {
@@ -23,6 +25,9 @@ const actions = {
       throw e
     }
   },
+  updateRating({commit}, {item, rating}){
+    commit('SET_RATING', {item, rating})
+  }
 }
 
 const getters = {

@@ -10,6 +10,7 @@ export const typeDefs = gql`
     title: String!
     overview: String
     poster: String
+    rating: Int
   }
   type Query {
     movie(id: String): Movie
@@ -23,8 +24,11 @@ export const resolvers = {
       return Movie.findOne({ _id: id })
     },
     movies: async (root, {page, count}, context, info) => {
-      const items = Movie.find().skip((page - 1) * count).limit(count)
-      return items
+      const items = await Movie.find().skip((page - 1) * count).limit(count)
+      return items.map(row => {
+        row.rating = 0
+        return row
+      })
     },
     moviesTotal: async () => {
       return Movie.count()
