@@ -1,0 +1,38 @@
+type Movie {
+    id: Int!
+    title: String!
+    rating: Float!
+    summary: String!
+    language: String!
+    medium_cover_image: String!
+}
+
+type Member {
+  member_seq: Int!
+  nickname: String
+  email: String!
+  regist_dt: String!
+}
+
+type List {
+  id: Int!
+  listing_url: String!
+  name: String!
+  summary: String!
+  space: String!
+}
+
+
+type Query {
+  hello: String!
+
+}
+
+# type Mutation {
+#   createUser(name: String, email: String): Boolean!
+# }
+
+schema {
+  query: Query
+  #mutation: Mutation
+}

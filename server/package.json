@@ -1,0 +1,30 @@
+{
+  "name": "graphql-movie-example",
+  "version": "1.0.0",
+  "description": "graphql movie api",
+  "main": "index.js",
+  "author": "shw",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server-express": "^2.8.1",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "graphql": "^14.4.2",
+    "graphql-tools": "^4.0.5",
+    "mongoose": "^5.6.7"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "stage-3"
+    ]
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js"
+  }
+}
