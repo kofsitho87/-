@@ -6,7 +6,10 @@ const state = {
 }
 
 const mutations = {
-  SET_MOVIES(state, s3dir) {
+  SET_MOVIES(state, movies) {
+    console.log(movies);
+    
+    state.movies.concat(movies)
   },
 }
 
