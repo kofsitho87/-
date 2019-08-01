@@ -14,7 +14,7 @@
         <b-card-text>
           {{item.overview}}
         </b-card-text>
-
+        <star-rating :show-rating="false" v-model="item.rating"></star-rating>
         <b-button href="#" variant="primary">Go somewhere</b-button>
       </b-card>
     </b-row>
@@ -25,13 +25,22 @@
 
 <script>
 import axios from 'axios'
+import StarRating from 'vue-star-rating'
 
 export default {
+  components: {
+    StarRating
+  },
   data(){
     return {
       page: 1,
       moviesTotal: 0,
-      movies: []
+      //movies: []
+    }
+  },
+  computed: {
+    movies(){
+      return this.$store.state.movie.movies
     }
   },
   mounted(){
@@ -39,11 +48,6 @@ export default {
   },
   methods: {
     async getMovies(){
-      let config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
       const query = {
         query: `
           query {
@@ -58,9 +62,8 @@ export default {
         `
       }
       try{
-        const {data} = await axios.post('http://localhost:4000/graphql', query, config)
-        this.movies = this.movies.concat(data.data.movies)
-        this.moviesTotal = data.data.moviesTotal
+        let {moviesTotal} = await this.$store.dispatch('getMovies', query)
+        this.moviesTotal = moviesTotal
         
       }catch(e){
         throw e
