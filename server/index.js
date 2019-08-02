@@ -1,15 +1,45 @@
 import express from 'express'
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 
-import connector from './db/connector'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+
+require('dotenv').config()
+
+const app = express();
+app.use(bodyParser.json())
+app.use(cors())
 
 const server = new ApolloServer({
   typeDefs: require('./graphql').typeDefs,
-  //typeDefs: './graphql/sceme.graphql',
-  resolvers: require('./graphql').resolvers
+  resolvers: require('./graphql').resolvers,
+  context: ({ req }) => {
+    let authToken = null
+    let currentUser = null
+
+    try {
+      // get the user token from the headers
+      authToken = req.headers.authorization || ''
+      if(authToken){
+        let result = jwt.verify(authToken, process.env.JWT_SECRET)
+        if(result){
+          currentUser = result
+        }
+      }
+    } catch (e) {
+      throw new AuthenticationError(
+        'Authentication token is invalid, please log in'
+      )
+    }
+    return {
+      authToken,
+      currentUser,
+    }
+  },
 });
 
-const app = express();
 server.applyMiddleware({ app, path:'/graphql' });
 
 

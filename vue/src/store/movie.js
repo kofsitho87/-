@@ -1,5 +1,5 @@
-import axios from './axios'
-
+import axios from '../axios'
+import store from './index'
 
 const state = {
   movies: []
@@ -18,22 +18,34 @@ const mutations = {
 const actions = {
   async getMovies({commit}, query) {
     try {
-      const {data} = await axios.post('/', query)
+      //console.log(store.getters.TOKEN);
+      let config = {
+        headers: {
+          authorization: store.getters.TOKEN || ''
+        }
+      }
+      const {data} = await axios.post('/', query, config)
       commit('SET_MOVIES', data.data.movies)
       return data.data
     } catch (e) {
       throw e
     }
   },
-  updateRating({commit}, {item, rating}){
-    commit('SET_RATING', {item, rating})
+  async updateRating({commit}, query){
+    
+    let config = {
+      headers: {
+        authorization: store.getters.TOKEN
+      }
+    }
+    const {data} = await axios.post('/', query, config)
+    console.log(data.data);
+    
+    //commit('SET_RATING', {item, rating})
   }
 }
 
-const getters = {
-  s3dir: state => {
-  },
-}
+const getters = {}
 
 export default {
   state,

@@ -15,6 +15,7 @@ const Movie = new mongoose.Schema({
   overview: {
     type: String,
   },
+  ratings: []
 });
 
 export default mongoose.model('Movie', Movie);
