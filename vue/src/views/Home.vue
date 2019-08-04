@@ -22,7 +22,8 @@
           v-bind:star-size="30"
           @rating-selected="setRatingAction($event, item)"></star-rating>
         <div>total: {{ item.totalRating / 2 }}</div>
-        <b-button class="mt-2" href="#" variant="primary">Go somewhere</b-button>
+        <!-- <b-button class="mt-2" href="/movies/" variant="primary">Go somewhere</b-button> -->
+        <router-link :to="`/movies/${item.id}`">상세보기</router-link>
       </b-card>
     </b-row>
     

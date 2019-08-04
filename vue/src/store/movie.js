@@ -31,6 +31,36 @@ const actions = {
       throw e
     }
   },
+  async getMovie(_, movieId) {
+    try {
+      let config = {
+        headers: {
+          authorization: store.getters.TOKEN || ''
+        }
+      }
+      const query = {
+        query: `
+          query {
+            movie(id: "${movieId}"){
+              id,
+              title,
+              poster,
+              overview,
+              director,
+              link,
+              actor,
+              userRating,
+              pubDate
+            }
+          }
+        `
+      }
+      const {data} = await axios.post('/', query, config)
+      return data.data
+    } catch (e) {
+      throw e
+    }
+  },
   async updateRating({commit}, query){
     
     let config = {

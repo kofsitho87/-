@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import axios from 'axios'
+
 import { gql } from 'apollo-server-express'
 import { Movie, User } from '../db'
 import {authenticated} from '../auth/authenticated-guard'
@@ -12,6 +14,12 @@ export const typeDefs = gql`
     poster: String
     totalRating: Int
     rating: Int
+
+    director: String
+    link: String
+    actor: String
+    userRating: String
+    pubDate: String
   }
   type User {
     id: String!
@@ -38,7 +46,30 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     movie: async (root, { id }, context, info) => {
-      return Movie.findOne({ _id: id })
+      try {
+        let movie = await Movie.findOne({ _id: id })
+        let result = await axios.get('https://openapi.naver.com/v1/search/movie.json', {
+          headers: {
+            "X-Naver-Client-Id": "nZalkT3c4_DxGJSsPH6y",
+            "X-Naver-Client-Secret": "zCa4SANDoj"
+          },
+          params: {
+            query: movie.title
+          }
+        })
+        if(result.data.total > 0){
+          //console.log(result.data.items[0]);
+          let item = result.data.items[0]
+          // console.log(movie);
+          // console.log(item);
+          let newMovie = Object.assign(movie, item)
+          console.log(newMovie);
+          return newMovie
+        }
+        return movie
+      }catch(e){
+        throw e
+      }
     },
     // movie: authenticated((root, {id}, context) => {
     //   return Movie.findOne({ _id: id })

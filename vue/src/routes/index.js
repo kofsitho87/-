@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 //import store from "@/store"
 
 import Home from "@/views/Home"
+import Movie from "@/views/Movie"
 import Login from "@/views/Login"
 
 Vue.use(VueRouter)
@@ -19,6 +20,11 @@ const router = new VueRouter({
       path: "/",
       component: Home,
       name: "Home"
+    },
+    {
+      path: "/movies/:id",
+      component: Movie,
+      name: "Movie"
     },
     {
       path: "/login",
